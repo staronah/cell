@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cell Attendance</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+
+    #mainLinkInput, #additionalParamsInput, #extraInput, #linkForm, #result, #qrCodeCanvas {
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      display: block;
+    }
+
+    #qrCodeCanvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cell Attendance</h1>
+  <p>Fill in the required information, then click on "Generate QR Code" and save it to your phone.</p>
+  <form id="linkForm">
+    <label for="mainLinkInput">SUB CELL:</label>
+    <input type="text" id="mainLinkInput" name="mainLink" placeholder="Enter Subcell" required>
+    <br>
+    <label for="additionalParamsInput">Matriculation Number:</label>
+    <input type="text" id="additionalParamsInput" name="additionalParams" placeholder="Enter Matriculation/reg number">
+    <br>
+    <label for="extraInput">Cell Number:</label>
+    <input type="text" id="extraInput" name="extraInfo" placeholder="Enter Cell number">
+    <br>
+    <button type="button" onclick="generateQRCode()">Generate QR Code</button>
+  </form>
+  <br>
+  <canvas id="qrCodeCanvas"></canvas>
+  <div id="result"></div>
+
+  <script>
+    function generateQRCode() {
+      const mainLink = document.getElementById("mainLinkInput").value.trim();
+      const additionalParams = document.getElementById("additionalParamsInput").value.trim();
+      const extraInfo = document.getElementById("extraInput").value.trim();
+      const fullLink = mainLink + '.' + additionalParams + '.' + extraInfo;
+      
+      if (mainLink.length > 0) {
+        const qrCodeCanvas = document.getElementById("qrCodeCanvas");
+        qrCodeCanvas.style.display = "block";
+        const qr = new QRious({
+          element: qrCodeCanvas,
+          value: fullLink,
+          size: 200
+        });
+
+        // Display the inputted information
+        document.getElementById("result").innerText = `Result: ${fullLink}`;
+        document.getElementById("result").style.display = "block";
+
+        // Hide the input form after generating QR code
+        document.getElementById("linkForm").style.display = "none";
+      } else {
+        alert("Please enter a valid main part of the site URL.");
+      }
+    }
+  </script>
+</body>
+</html>
+
+
